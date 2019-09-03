@@ -47,6 +47,43 @@ namespace RAWSimO.Core.Control
         public abstract void Finish();
     }
 
+
+    ///<summary>
+    /// This class represents a task of gathering multiple items 
+    ///</summary>
+    public class MultiPointGatherTask : BotTask
+    {   /// <summary>
+        /// Creates a new task.
+        /// </summary>
+        /// <param name="instance">The instance this task belongs to.</param>
+        /// <param name="bot">The bot that shall execute the task.</param>
+        /// <param name="locations">The list of locations that robot has to visit.</param>
+        public MultiPointGatherTask(Instance instance, Bot bot, List<Waypoint> locations)
+            : base(instance, bot)
+        {
+            Locations = locations;
+        }
+        /// <summary>
+        /// List of locations that the robot will visit
+        /// </summary>
+        public List<Waypoint> Locations {get; private set;}
+        /// <summary>
+        /// The type of the task.
+        /// </summary>
+        public override BotTaskType Type {get{return BotTaskType.MultiPointGatherTask;}}
+        public override void Cancel()
+        {
+            //Not implemented for now
+        }
+        public override void Finish()
+        {
+            //Not implemented for now
+        }
+        public override void Prepare()
+        {
+            //Not implemented for now
+        }
+    }
     /// <summary>
     /// This class represents a park pod task.
     /// </summary>

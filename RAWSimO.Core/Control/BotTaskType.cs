@@ -39,6 +39,11 @@ namespace RAWSimO.Core.Control
         /// <summary>
         /// Tells the bot to rest.
         /// </summary>
-        Rest
+        Rest,
+
+        /// <summary>
+        /// Tells the bot to visit given locations and gather items
+        /// </summary>
+        MultiPointGatherTask
     }
 }

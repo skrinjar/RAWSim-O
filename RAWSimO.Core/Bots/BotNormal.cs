@@ -363,6 +363,20 @@ namespace RAWSimO.Core.Bots
                         _appendMoveStates(CurrentWaypoint, restTask.RestingLocation);
                     StateQueueEnqueue(new BotRest(restTask.RestingLocation, BotRest.DEFAULT_REST_TIME)); // TODO set paramterized wait time and adhere to it
                     break;
+                case BotTaskType.MultiPointGatherTask:
+                    var task = t as MultiPointGatherTask;
+                    var location =  task.Locations.First();
+                    //request move from current location to the first location in a task 
+                    _appendMoveStates(CurrentWaypoint,location);
+                    //remove first element 
+                    task.Locations.RemoveAt(0);
+                    //itterate over the remaining locations of a list and mark them to be visited in that order
+                    foreach(var nextLocation in task.Locations)
+                    {
+                        _appendMoveStates(location, nextLocation);
+                        location = nextLocation;
+                    }
+                    break;
                 default:
                     throw new ArgumentException("Unknown task-type: " + t.Type);
             }

@@ -219,6 +219,22 @@ namespace RAWSimO.Core.Control
             EnqueueRest(bot, restLocation);
         }
 
+
+        protected void DoTestTask(Bot bot)
+        {
+            List<Waypoint> toVisit = new List<Waypoint>
+                {
+                Instance.Waypoints[10],
+                Instance.Waypoints[80],
+                Instance.Waypoints[190],
+                Instance.Waypoints[300]
+                };
+
+            var task =  new MultiPointGatherTask(Instance, bot, toVisit);
+            _taskQueues[bot] = task;
+            _lastTaskEnqueued[bot] = task; 
+        }
+
         /// <summary>
         /// Allocates a repositioning task, if available.
         /// </summary>
