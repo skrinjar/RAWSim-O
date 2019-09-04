@@ -64,32 +64,32 @@ namespace RAWSimO.Core.Elements
         /// <summary>
         /// The time it takes to pick one item from a pod and put it into the order tote.
         /// </summary>
-        public double ItemTransferTime;
+        private double itemTransferTime;
 
         /// <summary>
         /// The time it takes to pick one item from a pod (excluding the time it takes to put it into a tote - after this the robot is free to leave, if it does not have other items to be picked).
         /// </summary>
-        public double ItemPickTime;
+        private double itemPickTime;
 
         /// <summary>
         /// The time it takes to complete an order.
         /// </summary>
-        public double OrderCompletionTime;
+        private double orderCompletionTime;
 
         /// <summary>
         /// The waypoint this output-station is located at.
         /// </summary>
-        public Waypoint Waypoint;
+        private Waypoint waypoint;
 
         /// <summary>
         /// The order ID of this station that defines the sequence in which the stations have to be activated.
         /// </summary>
-        public int ActivationOrderID;
+        private int activationOrderID;
 
         /// <summary>
         /// The capacity of this station.
         /// </summary>
-        public int Capacity;
+        private int capacity;
 
         /// <summary>
         /// The capacity currently in use at this station.
@@ -430,15 +430,15 @@ namespace RAWSimO.Core.Elements
         /// <summary>
         /// The number of items handled by this station.
         /// </summary>
-        public int StatNumItemsPicked;
+        private int statNumItemsPicked;
         /// <summary>
         /// The number of items picked by this station that were injected to the task of the robot.
         /// </summary>
-        public int StatNumInjectedItemsPicked;
+        private int statNumInjectedItemsPicked;        
         /// <summary>
         /// The number of orders completed at this station.
         /// </summary>
-        public int StatNumOrdersFinished;
+        private int statNumOrdersFinished;
         /// <summary>
         /// The number of requests currently open (not assigned to a bot) for this station.
         /// </summary>
@@ -498,7 +498,7 @@ namespace RAWSimO.Core.Elements
         /// <summary>
         /// The time this station was idling.
         /// </summary>
-        public double StatIdleTime;
+        private double statIdleTime;
         /// <summary>
         /// The time this station was active.
         /// </summary>
@@ -510,7 +510,7 @@ namespace RAWSimO.Core.Elements
         /// <summary>
         /// The time this station was shutdown.
         /// </summary>
-        public double StatDownTime;
+        private double statDownTime;
         /// <summary>
         /// The timepoint at which the station completed its last order and may have moved to a rest state.
         /// </summary>
@@ -745,7 +745,20 @@ namespace RAWSimO.Core.Elements
         /// Note: For now the volatile ID matches the actual ID.
         /// </summary>
         int IExposeVolatileID.VolatileID { get { return VolatileID; } }
+        #endregion
 
+        #region PublicFieldsEncapsulation
+        public double ItemTransferTime { get => itemTransferTime; set => itemTransferTime = value; }
+        public double ItemPickTime { get => itemPickTime; set => itemPickTime = value; }
+        public double OrderCompletionTime { get => orderCompletionTime; set => orderCompletionTime = value; }
+        public Waypoint Waypoint { get => waypoint; set => waypoint = value; }
+        public int ActivationOrderID { get => activationOrderID; set => activationOrderID = value; }
+        public int Capacity { get => capacity; set => capacity = value; }
+        public int StatNumItemsPicked { get => statNumItemsPicked; set => statNumItemsPicked = value; }
+        public int StatNumInjectedItemsPicked{ get => statNumInjectedItemsPicked; set => statNumInjectedItemsPicked = value; }
+        public int StatNumOrdersFinished{ get => statNumOrdersFinished; set => statNumOrdersFinished = value; }
+        public double StatIdleTime{ get => statIdleTime; set => statIdleTime = value; }
+        public double StatDownTime{ get => statDownTime; set => statDownTime = value; }
         #endregion
     }
 }

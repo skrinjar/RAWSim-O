@@ -30,7 +30,7 @@ namespace RAWSimO.Core.Bots
         /// <summary>
         /// The bots request a re-optimization after failing of next way point reservation
         /// </summary>
-        public static bool RequestReoptimizationAfterFailingOfNextWaypointReservation = false;
+        private static bool requestReoptimizationAfterFailingOfNextWaypointReservation = false;
 
         /// <summary>
         /// The current destination of the bot as useful information for other mechanisms. If not available, the current waypoint will be provided.
@@ -75,7 +75,7 @@ namespace RAWSimO.Core.Bots
         /// <summary>
         /// next way point
         /// </summary>
-        public bool RequestReoptimization;
+        private bool requestReoptimization;
 
         #region State handling
 
@@ -92,16 +92,16 @@ namespace RAWSimO.Core.Bots
         /// Enqueues a state.
         /// </summary>
         /// <param name="state">The state to enqueue.</param>
-        private void StateQueueEnqueue(IBotState state) { _stateQueue.Enqueue(state); _currentInfoStateName = _stateQueue.Peek().ToString(); }
+        private void StateQueueEnqueue(IBotState state) { _stateQueue.Enqueue(state); CurrentInfoStateName = _stateQueue.Peek().ToString(); }
         /// <summary>
         /// Dequeues the next state from the state queue.
         /// </summary>
         /// <returns>The state that was just dequeued.</returns>
-        private IBotState StateQueueDequeue() { IBotState state = _stateQueue.Dequeue(); _currentInfoStateName = _stateQueue.Any() ? _stateQueue.Peek().ToString() : ""; return state; }
+        private IBotState StateQueueDequeue() { IBotState state = _stateQueue.Dequeue(); CurrentInfoStateName = _stateQueue.Any() ? _stateQueue.Peek().ToString() : ""; return state; }
         /// <summary>
         /// Clears the complete state queue.
         /// </summary>
-        private void StateQueueClear() { _stateQueue.Clear(); _currentInfoStateName = ""; }
+        private void StateQueueClear() { _stateQueue.Clear(); CurrentInfoStateName = ""; }
         /// <summary>
         /// The number of states currently in the queue.
         /// </summary>
@@ -152,7 +152,7 @@ namespace RAWSimO.Core.Bots
         /// <summary>
         /// The physics calculation object.
         /// </summary>
-        public Physics Physics;
+        private Physics physics;
 
         /// <summary>
         /// The current path.
@@ -245,6 +245,12 @@ namespace RAWSimO.Core.Bots
                     _currentWaypoint.QueueManager.onBotJoinQueue(this);
             }
         }
+
+        public static bool RequestReoptimizationAfterFailingOfNextWaypointReservation { get => requestReoptimizationAfterFailingOfNextWaypointReservation; set => requestReoptimizationAfterFailingOfNextWaypointReservation = value; }
+        public bool RequestReoptimization { get => requestReoptimization; set => requestReoptimization = value; }
+        public Physics Physics { get => physics; set => physics = value; }
+        public string CurrentInfoStateName { get => currentInfoStateName; set => currentInfoStateName = value; }
+
         /// <summary>
         /// The last waypoint.
         /// </summary>
@@ -855,12 +861,12 @@ namespace RAWSimO.Core.Bots
         /// <summary>
         /// The current state the bot is in (for async access).
         /// </summary>
-        public string _currentInfoStateName = "";
+        private string currentInfoStateName = "";
         /// <summary>
         /// state for the info panel
         /// </summary>
         /// <returns>state</returns>
-        public override string GetInfoState() { return _currentInfoStateName; }
+        public override string GetInfoState() { return CurrentInfoStateName; }
         /// <summary>
         /// Gets the current waypoint that is considered by planning.
         /// </summary>
@@ -1581,7 +1587,7 @@ namespace RAWSimO.Core.Bots
         internal class BotRest : IBotState
         {
             // TODO make rest time randomized and parameterized
-            public const double DEFAULT_REST_TIME = 5;
+            private const double dEFAULT_REST_TIME = 5;
 
             private Waypoint _waypoint;
             private double _timeSpan;
@@ -1639,6 +1645,7 @@ namespace RAWSimO.Core.Bots
             /// </summary>
             public BotStateType Type { get { return BotStateType.Rest; } }
 
+            public static double DEFAULT_REST_TIME => dEFAULT_REST_TIME;
         }
         #endregion
 
