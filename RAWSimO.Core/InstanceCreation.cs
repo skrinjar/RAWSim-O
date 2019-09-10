@@ -225,7 +225,7 @@ namespace RAWSimO.Core
         /// <param name="turnSpeed">The time it takes the bot to take a full turn in s.</param>
         /// <param name="collisionPenaltyTime">The penalty time for a collision in s.</param>
         /// <returns>The newly created bot.</returns>
-        public Bot CreateBot(int id, Tier tier, double x, double y, double radius, double orientation, double podTransferTime, double maxAcceleration, double maxDeceleration, double maxVelocity, double turnSpeed, double collisionPenaltyTime)
+        public Bot CreateBot(int id, Tier tier, double x, double y, double radius, double orientation, double podTransferTime, double maxAcceleration, double maxDeceleration, double maxVelocity, double turnSpeed, double collisionPenaltyTime, bool createMovableStation = false)
         {
             // Consider override values
             if (SettingConfig.OverrideConfig != null && SettingConfig.OverrideConfig.OverrideBotPodTransferTime)
@@ -240,23 +240,28 @@ namespace RAWSimO.Core
                 turnSpeed = SettingConfig.OverrideConfig.OverrideBotTurnSpeedValue;
             // Init
             Bot bot = null;
-            switch (ControllerConfig.PathPlanningConfig.GetMethodType())
-            {
-                case PathPlanningMethodType.Simple:
-                    bot = new BotHazard(this, ControllerConfig.PathPlanningConfig as SimplePathPlanningConfiguration);
-                    break;
-                case PathPlanningMethodType.Dummy:
-                case PathPlanningMethodType.WHCAvStar:
-                case PathPlanningMethodType.WHCAnStar:
-                case PathPlanningMethodType.FAR:
-                case PathPlanningMethodType.BCP:
-                case PathPlanningMethodType.OD_ID:
-                case PathPlanningMethodType.CBS:
-                case PathPlanningMethodType.PAS:
-                    bot = new BotNormal(id, this, radius, podTransferTime, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
-                    break;
-                default: throw new ArgumentException("Unknown path planning engine: " + ControllerConfig.PathPlanningConfig.GetMethodType());
+            if (createMovableStation){
+                bot = new MovableStation(id, this, radius, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
+            }else{
+                switch (ControllerConfig.PathPlanningConfig.GetMethodType())
+                {
+                    case PathPlanningMethodType.Simple:
+                        bot = new BotHazard(this, ControllerConfig.PathPlanningConfig as SimplePathPlanningConfiguration);
+                        break;
+                    case PathPlanningMethodType.Dummy:
+                    case PathPlanningMethodType.WHCAvStar:
+                    case PathPlanningMethodType.WHCAnStar:
+                    case PathPlanningMethodType.FAR:
+                    case PathPlanningMethodType.BCP:
+                    case PathPlanningMethodType.OD_ID:
+                    case PathPlanningMethodType.CBS:
+                    case PathPlanningMethodType.PAS:
+                        bot = new BotNormal(id, this, radius, podTransferTime, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
+                        break;
+                    default: throw new ArgumentException("Unknown path planning engine: " + ControllerConfig.PathPlanningConfig.GetMethodType());
+                }
             }
+            
             // Set values
             bot.ID = id;
             bot.Tier = tier;

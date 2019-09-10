@@ -380,16 +380,18 @@ namespace RAWSimO.Core.Generator
         public void generateRobots(Tier tier, Tile[,] tiles)
         {
             List<List<Waypoint>> waypoints = getWaypointsForInitialRobotPositions(tiles);
-            List<Waypoint> potentialBotLocations = waypoints.SelectMany(w => w).Where(w => w.Pod == null && w.InputStation == null && w.OutputStation == null).ToList();
-            for (int i = 0; i < lc.BotCount; i++)
+            List<Waypoint> potentialLocations = waypoints.SelectMany(w => w).Where(w => w.Pod == null && w.InputStation == null && w.OutputStation == null).ToList();
+            for (int i = 0; i < lc.BotCount + lc.MovableStationCount; i++)
             {
-                int randomWaypointIndex = rand.NextInt(potentialBotLocations.Count);
-                Waypoint botWaypoint = potentialBotLocations[randomWaypointIndex];
+                int randomWaypointIndex = rand.NextInt(potentialLocations.Count);
+                Waypoint Waypoint = potentialLocations[randomWaypointIndex];
                 int orientation = 0;
-                Bot bot = instance.CreateBot(instance.RegisterBotID(), tier, botWaypoint.X, botWaypoint.Y, lc.BotRadius, orientation, lc.PodTransferTime, lc.MaxAcceleration, lc.MaxDeceleration, lc.MaxVelocity, lc.TurnSpeed, lc.CollisionPenaltyTime);
-                botWaypoint.AddBotApproaching(bot);
-                bot.CurrentWaypoint = botWaypoint;
-                potentialBotLocations.RemoveAt(randomWaypointIndex);
+                Bot bot = instance.CreateBot(instance.RegisterBotID(), tier, Waypoint.X, Waypoint.Y, lc.BotRadius, orientation,
+                                             lc.PodTransferTime, lc.MaxAcceleration, lc.MaxDeceleration, lc.MaxVelocity,
+                                             lc.TurnSpeed, lc.CollisionPenaltyTime, i>= lc.BotCount);
+                Waypoint.AddBotApproaching(bot);
+                bot.CurrentWaypoint = Waypoint;
+                potentialLocations.RemoveAt(randomWaypointIndex);
             }
         }
 

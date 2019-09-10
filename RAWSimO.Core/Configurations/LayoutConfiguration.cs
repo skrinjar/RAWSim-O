@@ -41,7 +41,11 @@ namespace RAWSimO.Core.Configurations
         /// <summary>
         /// The number of bots to generate.
         /// </summary>
-        public int BotCount = 32;
+        public int BotCount = 0;
+         /// <summary>
+        /// The number of MovableStations to generate.
+        /// </summary>
+        public int MovableStationCount = 32;
         /// <summary>
         /// The radius of a bot in m.
         /// </summary>
@@ -336,9 +340,9 @@ namespace RAWSimO.Core.Configurations
                 errorMessage = "TierHeight <= 0, TierHeight: " + TierHeight;
                 return false;
             }
-            if (BotCount <= 0 || BotCount > maxBots())
+            if (BotCount < 0 || MovableStationCount < 0 || BotCount + MovableStationCount > maxBots())
             {
-                errorMessage = "BotCount <= 0  || BotCount > maxBots(), BotCount: " + BotCount;
+                errorMessage = "BotCount < 0 || MovableStationCount < 0 || BotCount + MovableStationCount > maxBots(): " + BotCount + MovableStationCount;
                 return false;
             }
             if (BotCount > maxUnusedStorageLocations())

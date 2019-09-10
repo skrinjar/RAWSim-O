@@ -349,13 +349,19 @@ namespace RAWSimO.Core.Elements
         /// </summary>
         /// <param name="currentTime">The current time of the simulation.</param>
         /// <returns>The next time this element has to be updated.</returns>
-        public abstract double GetNextEventTime(double currentTime);
+        public virtual double GetNextEventTime(double currentTime)
+        {
+            throw new NotImplementedException(); //was abstract before but need polymorphism 
+        }                                        //force redefinition on inherited classes   
         /// <summary>
         /// Do update.
         /// </summary>
         /// <param name="lastTime">last time update call</param>
         /// <param name="currentTime">current time</param>
-        public abstract void Update(double lastTime, double currentTime);
+        public virtual void Update(double lastTime, double currentTime)
+        {
+            throw new NotImplementedException(); //was abstract before but need polymorphism 
+        }                                         //force redefinition on inherited classes  
 
         #endregion
 
