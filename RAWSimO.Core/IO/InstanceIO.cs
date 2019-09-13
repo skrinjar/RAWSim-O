@@ -186,6 +186,27 @@ namespace RAWSimO.Core.IO
             return list;
         }
         /// <summary>
+        /// Reads an order list from a csv file.
+        /// </summary>
+        /// <param name="orderFile">Path to CSV file .</param>
+        /// <param name="instance">The instance to submit to.</param>
+        /// <returns>The order list.</returns>
+        public static void ReadOrdersFromFile(string orderFile, Instance instance)
+        {
+            // Read the list
+            instance.CreateOrderList(ItemType.LocationsList);
+            using (StreamReader sr = new StreamReader(orderFile))
+            {
+                while (!sr.EndOfStream)
+                {
+                    //read string line as a list of int
+                    List<int> locations = sr.ReadLine().Split(',').Select(Int32.Parse).ToList();
+                    DummyOrder order = new DummyOrder(locations);
+                    instance.OrderList.Orders.Add(order);
+                }
+            }
+        }
+        /// <summary>
         /// Reads the configuration for a simple item generator instance.
         /// </summary>
         /// <param name="file">The file.</param>

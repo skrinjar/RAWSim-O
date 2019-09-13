@@ -56,6 +56,21 @@ namespace RAWSimO.Core.Control
             instance.PodPickup += PodPickup;
         }
 
+
+         /// <summary>
+        /// Enqueues an MultiPointGather task.
+        /// </summary>
+        /// <param name="movableStation">The bot that shall execute the task.</param>
+        /// <param name="order">The station at which the task will be executed.</param>
+        protected void EnqueueMultiPointGather(MovableStation station, DummyOrder order)
+        {
+           MultiPointGatherTask task = new MultiPointGatherTask(Instance, station, order);
+            task.Prepare();
+            if (_taskQueues[station] != null)
+                _taskQueues[station].Cancel();
+            _taskQueues[station] = task;
+            _lastTaskEnqueued[station] = task;
+        }
         /// <summary>
         /// Enqueues an extraction task.
         /// </summary>

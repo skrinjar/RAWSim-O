@@ -91,6 +91,15 @@ namespace RAWSimO.Core.Configurations
         public bool Recycle = false;
     }
 
+    public class GreedyOrderSchedulerConfiguration : OrderBatchingConfiguration
+    {
+        public override OrderBatchingMethodType GetMethodType(){ return OrderBatchingMethodType.Greedy; }
+        public override string GetMethodName(){
+            if (!string.IsNullOrWhiteSpace(Name)) return Name;
+            return "obG";
+        }
+    }
+
     /// <summary>
     /// The configuration for the corresponding method.
     /// </summary>

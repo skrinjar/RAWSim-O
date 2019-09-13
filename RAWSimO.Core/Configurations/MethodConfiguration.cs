@@ -114,6 +114,10 @@ namespace RAWSimO.Core.Configurations
         /// A new method that has no concept yet.
         /// </summary>
         Concept,
+        /// <summary>
+        /// method assigning bots to its only station
+        /// </summary>
+        Dummy,
     }
     /// <summary>
     /// All types of implemented station activation strategies.
@@ -280,6 +284,10 @@ namespace RAWSimO.Core.Configurations
         /// An approach exploiting information about the backlog to increase similarities of orders at the stations.
         /// </summary>
         Foresight,
+        /// <summary>
+        /// A greedy approach where order is assigned to the first available station
+        /// </summary>
+        Greedy,
     }
     /// <summary>
     /// All types of implemented replenishment batching strategies.
@@ -571,6 +579,7 @@ namespace RAWSimO.Core.Configurations
     /// Base class for the task allocation configuration.
     /// </summary>
     [XmlInclude(typeof(BruteForceTaskAllocationConfiguration))]
+    [XmlInclude(typeof(DummyTaskAllocationConfiguration))]
     [XmlInclude(typeof(RandomTaskAllocationConfiguration))]
     [XmlInclude(typeof(BalancedTaskAllocationConfiguration))]
     [XmlInclude(typeof(SwarmTaskAllocationConfiguration))]
@@ -686,6 +695,7 @@ namespace RAWSimO.Core.Configurations
     /// <summary>
     /// Base class for the order batching configuration.
     /// </summary>
+    [XmlInclude(typeof(GreedyOrderSchedulerConfiguration))]
     [XmlInclude(typeof(DefaultOrderBatchingConfiguration))]
     [XmlInclude(typeof(RandomOrderBatchingConfiguration))]
     [XmlInclude(typeof(WorkloadOrderBatchingConfiguration))]

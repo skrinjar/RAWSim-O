@@ -140,7 +140,7 @@ namespace RAWSimO.Core.Management
 
         private void SignalNewOrderAvailable(Order order)
         {
-            // Init, if necessary
+           /* // Init, if necessary
             if (_currentActualStock == null)
                 InitStockInfo();
             // Update stock information
@@ -152,6 +152,7 @@ namespace RAWSimO.Core.Management
                 // Update demand info
                 _currentOverallDemand[position.Key] += position.Value;
             }
+            */
         }
 
         #endregion

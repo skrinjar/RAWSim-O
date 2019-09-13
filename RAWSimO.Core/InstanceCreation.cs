@@ -240,8 +240,10 @@ namespace RAWSimO.Core
                 turnSpeed = SettingConfig.OverrideConfig.OverrideBotTurnSpeedValue;
             // Init
             Bot bot = null;
+            MovableStation ms = null;
             if (createMovableStation){
-                bot = new MovableStation(id, this, radius, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
+                ms = new MovableStation(id, this, radius, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
+                bot = ms;
             }else{
                 switch (ControllerConfig.PathPlanningConfig.GetMethodType())
                 {
@@ -282,7 +284,15 @@ namespace RAWSimO.Core
                 ((BotHazard)bot).SetTargetOrientation(orientation);
             }
             // Add bot
-            Bots.Add(bot);
+            if(ms != null)
+            {
+                ms.Capacity = 1000;
+                Bots.Add(ms);
+                //bot was referencing only bot-part of movable station and those values were updated
+                MovableStations.Add(ms);
+            }else{
+                Bots.Add(bot);
+            }
             tier.AddBot(bot);
             _idToBots[bot.ID] = bot;
             // Determine volatile ID

@@ -33,7 +33,7 @@ namespace RAWSimO.Core.Generator
         {
             if (currentStation != semaphoreBlueprints.GetLength(0) - 1 && currentSemaphore != semaphoreBlueprints.GetLength(1))
             {
-                throw new ArgumentException("not all stations will be covered with semaphores");
+                //throw new ArgumentException("not all stations will be covered with semaphores");
             }
             for (int whichStation = 0; whichStation < semaphoreBlueprints.GetLength(0); whichStation++)
             {

@@ -42,6 +42,7 @@ namespace RAWSimO.Core.Control
             // Init bot manager
             switch (instance.ControllerConfig.TaskAllocationConfig.GetMethodType())
             {
+                case TaskAllocationMethodType.Dummy: BotManager = new DummyBotManager(instance); break;
                 case TaskAllocationMethodType.BruteForce: BotManager = new BruteForceBotManager(instance); break;
                 case TaskAllocationMethodType.Random: BotManager = new RandomBotManager(instance); break;
                 case TaskAllocationMethodType.Balanced: BotManager = new BalancedBotManager(instance); break;
@@ -98,6 +99,7 @@ namespace RAWSimO.Core.Control
             // Init order batching manager
             switch (instance.ControllerConfig.OrderBatchingConfig.GetMethodType())
             {
+                case OrderBatchingMethodType.Greedy: OrderManager = new GreedyOrderManager(instance); break;
                 case OrderBatchingMethodType.Default: OrderManager = new DefaultOrderManager(instance); break;
                 case OrderBatchingMethodType.Random: OrderManager = new RandomOrderManager(instance); break;
                 case OrderBatchingMethodType.Workload: OrderManager = new WorkloadOrderManager(instance); break;

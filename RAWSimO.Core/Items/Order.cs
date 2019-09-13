@@ -148,7 +148,7 @@ namespace RAWSimO.Core.Items
         /// Checks whether the order is complete.
         /// </summary>
         /// <returns><code>true</code> if the order is complete, <code>false</code> otherwise.</returns>
-        public bool IsCompleted() { return _servedPositions >= _quantities.Count; }
+        public virtual bool IsCompleted() { return _servedPositions >= _quantities.Count; }
 
         #endregion
 

@@ -76,6 +76,10 @@ namespace RAWSimO.Core
         /// </summary>
         public List<Bot> Bots = new List<Bot>();
         /// <summary>
+        /// All movable stations of this instance.
+        /// </summary>
+        public List<MovableStation> MovableStations = new List<MovableStation>();
+        /// <summary>
         /// All pods of this instance.
         /// </summary>
         public List<Pod> Pods = new List<Pod>();

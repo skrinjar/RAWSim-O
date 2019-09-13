@@ -45,7 +45,7 @@ namespace RAWSimO.Core.Configurations
          /// <summary>
         /// The number of MovableStations to generate.
         /// </summary>
-        public int MovableStationCount = 32;
+        public int MovableStationCount = 4;
         /// <summary>
         /// The radius of a bot in m.
         /// </summary>
@@ -173,7 +173,7 @@ namespace RAWSimO.Core.Configurations
         /// <summary>
         /// The number of pick stations placed at the east end of the system.
         /// </summary>
-        public int NPickStationEast = 4;
+        public int NPickStationEast = 0;
         /// <summary>
         /// The number of pick stations placed at the south end of the system.
         /// </summary>
@@ -185,7 +185,7 @@ namespace RAWSimO.Core.Configurations
         /// <summary>
         /// The number of replenishment stations placed at the west end of the system.
         /// </summary>
-        public int NReplenishmentStationWest = 4;
+        public int NReplenishmentStationWest = 0;
         /// <summary>
         /// The number of replenishment stations placed at the east end of the system.
         /// </summary>
@@ -531,14 +531,14 @@ namespace RAWSimO.Core.Configurations
                 errorMessage = "NElevatorsNorth < 0, NElevatorsNorth: " + NElevatorsNorth;
                 return false;
             }
-            if (NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth < 1)
+            if (NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth < 0)
             {
-                errorMessage = "NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth < 1, NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth = " + (NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth);
+                errorMessage = "NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth < 0, NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth = " + (NPickStationWest + NPickStationEast + NPickStationSouth + NPickStationNorth);
                 return false; //there should always be at least one pick station
             }
-            if (NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth < 1)
+            if (NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth < 0)
             {
-                errorMessage = "NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth < 1, NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth = " + (NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth);
+                errorMessage = "NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth < 0, NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth = " + (NReplenishmentStationWest + NReplenishmentStationEast + NReplenishmentStationSouth + NReplenishmentStationNorth);
                 return false; //there should always be at least one replenishment station
             }
             if (NPickStationSouth + NReplenishmentStationSouth + NElevatorsSouth > maxNrOfStationsNorthOrSouth())

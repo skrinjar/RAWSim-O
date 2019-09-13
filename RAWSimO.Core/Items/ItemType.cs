@@ -19,5 +19,9 @@ namespace RAWSimO.Core.Items
         /// An item that is described by a combination of a letter and a color.
         /// </summary>
         Letter,
+        /// <summary>
+        /// An item that is list of waypoints.
+        /// </summary>
+        LocationsList,
     }
 }

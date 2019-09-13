@@ -16,7 +16,7 @@ namespace RAWSimO.Core.Elements
     /// <summary>
     /// The auxiliary class that redefines OutputStation class
     /// </summary>
-    internal class OutputStationAux : OutputStation
+    public class OutputStationAux : OutputStation
     {
         ///<summary>
         ///reference to the whole MovableStation class of which this class is part
@@ -34,6 +34,15 @@ namespace RAWSimO.Core.Elements
         public static implicit operator MovableStation(OutputStationAux os)
         {
             return os.movableStationPart;
+        }
+        /// <summary>
+        /// removes completed order from the parent movable station
+        /// </summary>
+        /// <param name="currentTime"></param>
+        /// <returns></returns>
+        protected override Order RemoveAnyCompletedOrder(double currentTime)
+        {
+            return movableStationPart.RemoveAnyCompletedOrder(currentTime);
         }
     }
 

@@ -430,8 +430,10 @@ namespace RAWSimO.Core.Management
                 // Manage queue info
                 _stationQueuedPerExtractRequest.Remove(request);
             }
+            /*
             station.StatCurrentlyOpenRequests = _availableExtractRequestsPerStation[station].Count;
             station.StatCurrentlyOpenQueuedRequests = _availableExtractRequestsPerStationQueue[station].Count;
+            */
         }
 
         /// <summary>

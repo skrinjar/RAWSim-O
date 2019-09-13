@@ -371,7 +371,7 @@ namespace RAWSimO.Core.Bots
                     break;
                 case BotTaskType.MultiPointGatherTask:
                     var task = t as MultiPointGatherTask;
-                    var location =  task.Locations.First();
+                    var location =  task.Locations.FirstOrDefault();
                     //request move from current location to the first location in a task 
                     _appendMoveStates(CurrentWaypoint,location);
                     //remove first element 

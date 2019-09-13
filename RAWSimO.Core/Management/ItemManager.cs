@@ -666,7 +666,7 @@ namespace RAWSimO.Core.Management
                         #region Fixed mode initialization
 
                         // --> Parse the list of orders
-                        InstanceIO.ReadOrders(Instance.SettingConfig.InventoryConfiguration.FixedInventoryConfiguration.OrderFile, Instance);
+                        InstanceIO.ReadOrdersFromFile(Instance.SettingConfig.InventoryConfiguration.FixedInventoryConfiguration.OrderFile, Instance);
 
                         // --> Init the fixed order mode
                         // Add item descriptions
@@ -676,15 +676,16 @@ namespace RAWSimO.Core.Management
                         // Copy over bundle list
                         _futureBundles.AddRange(Instance.OrderList.Bundles.OrderBy(b => b.TimeStamp));
                         // Set probabilites for random bundle generation
-                        _itemDescriptionProbabilities = new VolatileIDDictionary<ItemDescription, double>(_itemDescriptions.Select(i => new VolatileKeyValuePair<ItemDescription, double>(i, 0)).ToList());
+                        //_itemDescriptionProbabilities = new VolatileIDDictionary<ItemDescription, double>(_itemDescriptions.Select(i => new VolatileKeyValuePair<ItemDescription, double>(i, 0)).ToList());
+                        //_itemDescriptionProbabilities = new VolatileIDDictionary<ItemDescription, double>(null);
                         int itemsOrderedOverall = _futureOrders.Sum(o => o.Positions.Sum(p => p.Value));
-                        foreach (var itemDescription in _itemDescriptions)
-                            _itemDescriptionProbabilities[itemDescription] = _futureOrders.SelectMany(o => o.Positions).Where(p => p.Key == itemDescription).Sum(p => p.Value) / (double)itemsOrderedOverall;
+                        //foreach (var itemDescription in _itemDescriptions)
+                            //_itemDescriptionProbabilities[itemDescription] = _futureOrders.SelectMany(o => o.Positions).Where(p => p.Key == itemDescription).Sum(p => p.Value) / (double)itemsOrderedOverall;
                         // Set requirements so that all future orders can be fulfilled (when using Letter-items)
-                        foreach (var itemDescription in _itemDescriptions)
-                            _itemDemandInformation[itemDescription] = _futureOrders.SelectMany(o => o.Positions).Where(p => p.Key == itemDescription).Sum(p => p.Value);
+                        //foreach (var itemDescription in _itemDescriptions)
+                           // _itemDemandInformation[itemDescription] = _futureOrders.SelectMany(o => o.Positions).Where(p => p.Key == itemDescription).Sum(p => p.Value);
                         // Generate random pod content
-                        InitializePodContentsRandomly(Instance.SettingConfig.InventoryConfiguration.InitialInventory);
+                        //InitializePodContentsRandomly(Instance.SettingConfig.InventoryConfiguration.InitialInventory);
 
                         #endregion
                     }

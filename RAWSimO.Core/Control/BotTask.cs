@@ -62,11 +62,32 @@ namespace RAWSimO.Core.Control
             : base(instance, bot)
         {
             Locations = locations;
+            _order = null;
+        }
+         /// <summary>
+        /// Creates a new task.
+        /// </summary>
+        /// <param name="instance">The instance this task belongs to.</param>
+        /// <param name="bot">The bot that shall execute the task.</param>
+        /// <param name="order">DummyOrder which will be transformed to task</param>
+        public MultiPointGatherTask(Instance instance, Bot bot, DummyOrder order)
+            : base(instance, bot)
+        {
+            Locations = new List<Waypoint>();
+            foreach (int idx in order.Locations)
+            {
+                Locations.Add(instance.Waypoints[idx]);
+            }
+            _order = order;
         }
         /// <summary>
         /// List of locations that the robot will visit
         /// </summary>
         public List<Waypoint> Locations {get; private set;}
+        /// <summary>
+        /// order from which the task was created
+        /// </summary>
+        private Order _order;
         /// <summary>
         /// The type of the task.
         /// </summary>
@@ -75,9 +96,21 @@ namespace RAWSimO.Core.Control
         {
             //Not implemented for now
         }
+        /// <summary>
+        /// Finish the task and signal OrderManager
+        /// </summary>
         public override void Finish()
         {
-            //Not implemented for now
+            if (Bot is MovableStation)
+            {
+                var station = Bot as MovableStation;
+                if (_order != null)
+                {
+                    station.StationPart._assignedOrders.Remove(_order);
+                }
+                
+            }
+
         }
         public override void Prepare()
         {

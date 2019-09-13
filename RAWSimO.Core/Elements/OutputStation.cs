@@ -104,7 +104,7 @@ namespace RAWSimO.Core.Elements
         /// <summary>
         /// The orders currently assigned to this station.
         /// </summary>
-        private HashSet<Order> _assignedOrders = new HashSet<Order>();
+        public HashSet<Order> _assignedOrders = new HashSet<Order>();
         /// <summary>
         /// The set of orders not yet allocated but already registered with this station.
         /// </summary>
@@ -302,7 +302,7 @@ namespace RAWSimO.Core.Elements
         /// </summary>
         /// <param name="currentTime">The current simulation time.</param>
         /// <returns>The completed order if there was one, <code>null</code> otherwise.</returns>
-        protected Order RemoveAnyCompletedOrder(double currentTime)
+        protected virtual Order RemoveAnyCompletedOrder(double currentTime)
         {
             // Remove any orders that are finished
             Order finishedOrder = null;
@@ -622,7 +622,7 @@ namespace RAWSimO.Core.Elements
             if (currentTime - _statDepletionTime > Instance.SettingConfig.StationShutdownThresholdTime)
                 StatDownTime += Math.Min(currentTime - _statDepletionTime, currentTime - lastTime);
 
-            if (RemoveAnyCompletedOrder(currentTime) != null)
+            if (this.RemoveAnyCompletedOrder(currentTime) != null)
                 return;
 
             if (TakeItemFromPod(currentTime))

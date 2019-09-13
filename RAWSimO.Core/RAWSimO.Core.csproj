@@ -58,7 +58,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Mono\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
@@ -108,6 +108,7 @@
     <Compile Include="Control\Defaults\OrderBatching\QueueOrderManager.cs" />
     <Compile Include="Control\Defaults\OrderBatching\RelatedOrderManager.cs" />
     <Compile Include="Control\Defaults\OrderBatching\WorkloadOrderManager.cs" />
+    <Compile Include="Control\Defaults\OrderBatching\GreedyOrderManager.cs" />
     <Compile Include="Control\Defaults\PodStorage\CachePodStorageManager.cs" />
     <Compile Include="Control\Defaults\PodStorage\UtilityPodStorageManager.cs" />
     <Compile Include="Control\Defaults\Repositioning\CacheDropoffRepositioningManager.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Control\Defaults\StationActivation\WorkShiftStationActivationManager.cs" />
     <Compile Include="Control\Defaults\TaskAllocation\ConceptBotManager.cs" />
     <Compile Include="Control\Defaults\TaskAllocation\ConstantRatioBotManager.cs" />
+    <Compile Include="Control\Defaults\TaskAllocation\DummyBotManager.cs" />
     <Compile Include="Control\PodStorageManager.cs" />
     <Compile Include="Control\Defaults\PodStorage\StationBasedPodStorageManager.cs" />
     <Compile Include="Control\Defaults\PodStorage\TurnoverPodStorageManager.cs" />
@@ -168,6 +170,7 @@
     <Compile Include="Interfaces\IStatTracker.cs" />
     <Compile Include="Items\SimpleItemBundle.cs" />
     <Compile Include="Items\SimpleItemDescription.cs" />
+    <Compile Include="Items\DummyOrder.cs" />
     <Compile Include="Management\MetaInformationManager.cs" />
     <Compile Include="Management\StockInformation.cs" />
     <Compile Include="Metrics\Distances.cs" />
