@@ -79,6 +79,11 @@ namespace RAWSimO.Core.Waypoints
         public Pod Pod { get; internal set; }
 
         /// <summary>
+        /// Returns whether this waypoint has pod
+        /// </summary>
+        public bool HasPod { get => Pod != null; }
+
+        /// <summary>
         /// Indicates whether this waypoint can be used to store pods.
         /// </summary>
         public bool PodStorageLocation { get; internal set; }

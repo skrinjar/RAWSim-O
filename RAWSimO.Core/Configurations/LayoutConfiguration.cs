@@ -121,11 +121,11 @@ namespace RAWSimO.Core.Configurations
         /// <summary>
         /// Indicates whether aisles are generated in two directional mode or not.
         /// </summary>
-        public bool AislesTwoDirectional = false;
+        public bool AislesTwoDirectional = true;
         /// <summary>
         /// Indicates whether aisles will be generated as single lanes.
         /// </summary>
-        public bool SingleLane = true;
+        public bool SingleLane = false;
         /// <summary>
         /// The name of the layout.
         /// </summary>
