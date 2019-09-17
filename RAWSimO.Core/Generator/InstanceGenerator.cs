@@ -454,8 +454,8 @@ namespace RAWSimO.Core.Generator
             layoutConfiguration.IStationCapacity = 1000;
             layoutConfiguration.OStationCapacity = 18;
             layoutConfiguration.ElevatorTransportationTimePerTier = 10;
-            layoutConfiguration.AislesTwoDirectional = false;
-            layoutConfiguration.SingleLane = true;
+            layoutConfiguration.AislesTwoDirectional = true;
+            layoutConfiguration.SingleLane = false;
             layoutConfiguration.HorizontalLengthBlock = 4;
             layoutConfiguration.WidthHall = 6;
             layoutConfiguration.WidthBuffer = 4;

@@ -112,9 +112,24 @@ namespace RAWSimO.Core.Control
             }
 
         }
+        /// <summary>
+        /// Prepares the task by adjusting waypoints so that they are not blocked by pods
+        /// </summary>
         public override void Prepare()
         {
-            //Not implemented for now
+            if (Locations == null) throw new TaskCanceledException("DummyTask Location was unitialized but Prepare() was called");
+            for (int i = 0; i < Locations.Count; ++i)
+            {
+                if(Locations[i].HasPod)
+                    //if there is a pod located in this waypoint, find the neighbouring waypoint which is clear
+                    foreach (Waypoint newWaypoint in Locations[i].Paths)
+                        if (!newWaypoint.HasPod)
+                        {
+                            Locations[i] = newWaypoint;
+                            break;
+                        }
+                            
+            }
         }
     }
     /// <summary>
