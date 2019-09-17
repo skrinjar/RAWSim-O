@@ -39,6 +39,8 @@ namespace RAWSimO.Core.Bots
 
         #region DynamicAttributes
 
+        public override BotType Type => BotType.BotHazzard;
+
         /// <summary>
         /// The bot's targeted velocity regarding the x-dimension.
         /// </summary>

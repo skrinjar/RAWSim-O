@@ -47,6 +47,10 @@ namespace RAWSimO.Core.Configurations
         /// </summary>
         public int MovableStationCount = 4;
         /// <summary>
+        /// The number of Mates to generate
+        /// </summary>
+        public int MateBotCount = 4;
+        /// <summary>
         /// The radius of a bot in m.
         /// </summary>
         public double BotRadius = 0.35;
@@ -330,6 +334,11 @@ namespace RAWSimO.Core.Configurations
         /// <returns>Indicates whether the layout is valid.</returns>
         public bool isValid(out String errorMessage)
         {
+            if(MateBotCount <= 0)
+            {
+                errorMessage = "At least one MateBot is required";
+                return false;
+            }
             if (TierCount <= 0)
             {
                 errorMessage = "TierCount <= 0, TierCount: " + TierCount;

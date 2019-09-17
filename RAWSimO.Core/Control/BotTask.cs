@@ -47,6 +47,78 @@ namespace RAWSimO.Core.Control
         public abstract void Finish();
     }
 
+    /// <summary>
+    /// this class represents a task of assisting at a waypoint
+    /// </summary>
+    public class AssistTask : BotTask
+    {
+        /// <summary>
+        /// Constructs new AssistTask for a waypoint
+        /// </summary>
+        /// <param name="instance">current instance</param>
+        /// <param name="assistant">Bot which will execute the assist task</param>
+        /// <param name="waypoint">Waypoint on which assist is needed</param>
+        /// <param name="botToAssist">Bot which needs assistance</param>
+        public AssistTask(Instance instance, Bot assistant, Waypoint waypoint, Bot botToAssist) 
+            : base(instance, assistant)
+        {
+            Waypoint = waypoint;
+            BotToAssist = botToAssist;
+            BotToAssistArrived = false;
+            AssistantArrived = false;
+        }
+        /// <summary>
+        /// Construct new AssistTask for a location on idx
+        /// </summary>
+        /// <param name="instance">current instance</param>
+        /// <param name="assistant">Bot which will execute the assist task</param>
+        /// <param name="idx">Index at which the assist is needed </param>
+        /// <param name="botToAssist">Bot which needs assistance</param>
+        public AssistTask(Instance instance, Bot assistant, int idx, Bot botToAssist) 
+            :this(instance, assistant, instance.Waypoints[idx], botToAssist ) { }
+
+        /// <summary>
+        /// returns whether Bot that needs assistance has arrived
+        /// </summary>
+        public bool BotToAssistArrived { get; set; }
+        /// <summary>
+        /// returns whether Bot that offers assistance has arrived
+        /// </summary>
+        public bool AssistantArrived { get; set; }
+        /// <summary>
+        /// Bot which needs assistance
+        /// </summary>
+        public Bot BotToAssist { get; private set; }
+        /// <summary>
+        /// Waypoint at which the assist is needed
+        /// </summary>
+        public Waypoint Waypoint { get; private set; }
+        /// <summary>
+        /// Type of the Task
+        /// </summary>
+        public override BotTaskType Type => BotTaskType.AssistTask;
+        /// <summary>
+        /// Cancel this task
+        /// </summary>
+        public override void Cancel()
+        {
+            //Not implemented for now
+        }
+        /// <summary>
+        /// finish this task
+        /// </summary>
+        public override void Finish()
+        {
+            //Not implemented for now
+        }
+        /// <summary>
+        /// prepare this task
+        /// </summary>
+        public override void Prepare()
+        {
+            //Not implemented for now
+        }
+    }
 
     ///<summary>
     /// This class represents a task of gathering multiple items 
@@ -91,7 +163,7 @@ namespace RAWSimO.Core.Control
         /// <summary>
         /// The type of the task.
         /// </summary>
-        public override BotTaskType Type {get{return BotTaskType.MultiPointGatherTask;}}
+        public override BotTaskType Type => BotTaskType.MultiPointGatherTask;
         public override void Cancel()
         {
             //Not implemented for now

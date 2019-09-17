@@ -44,6 +44,11 @@ namespace RAWSimO.Core.Control
         /// <summary>
         /// Tells the bot to visit given locations and gather items
         /// </summary>
-        MultiPointGatherTask
+        MultiPointGatherTask,
+
+        /// <summary>
+        /// Tells the bot to assist another bot at a given location
+        /// </summary>
+        AssistTask
     }
 }

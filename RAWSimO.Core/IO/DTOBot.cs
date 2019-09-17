@@ -130,7 +130,8 @@ namespace RAWSimO.Core.IO
                 MaxDeceleration,
                 MaxVelocity,
                 TurnSpeed,
-                CollisionPenaltyTime);
+                CollisionPenaltyTime,
+                BotType.BotNormal);
         }
 
         #endregion

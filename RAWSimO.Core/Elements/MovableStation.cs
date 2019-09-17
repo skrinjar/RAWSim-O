@@ -22,7 +22,7 @@ namespace RAWSimO.Core.Elements
     public class MovableStation : BotNormal
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BotNormal"/> class.
+        /// Initializes a new instance of the <see cref="MovableStation"/> class.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="instance">The instance.</param>
@@ -345,9 +345,11 @@ namespace RAWSimO.Core.Elements
 
         #endregion
 
-        #region MovableStationSpecifics
-
-        
+        #region BotNormalOverrides
+        /// <summary>
+        /// Gets BotType
+        /// </summary>
+        public override BotType Type => BotType.MovableStation;
 
         #endregion
     }

@@ -80,6 +80,10 @@ namespace RAWSimO.Core
         /// </summary>
         public List<MovableStation> MovableStations = new List<MovableStation>();
         /// <summary>
+        /// All MateBots of this instace
+        /// </summary>
+        public List<MateBot> MateBots = new List<MateBot>();
+        /// <summary>
         /// All pods of this instance.
         /// </summary>
         public List<Pod> Pods = new List<Pod>();

@@ -122,6 +122,11 @@ namespace RAWSimO.Core.Elements
         public abstract void AssignTask(BotTask t);
 
         /// <summary>
+        /// Gets BotType
+        /// </summary>
+        public abstract BotType Type { get; }
+
+        /// <summary>
         /// Picks up the specified pod.
         /// </summary>
         /// <param name="pod">The pod to pick up.</param>
@@ -484,5 +489,26 @@ namespace RAWSimO.Core.Elements
         public abstract void OnSetDownPod();
 
         #endregion
+    }
+
+
+    public enum BotType
+    {
+        /// <summary>
+        /// regular bot type
+        /// </summary>
+        BotNormal,
+        /// <summary>
+        /// Hazardous bot type
+        /// </summary>
+        BotHazzard,
+        /// <summary>
+        /// Movable output station type
+        /// </summary>
+        MovableStation,
+        /// <summary>
+        /// experimental type
+        /// </summary>
+        MateBot
     }
 }

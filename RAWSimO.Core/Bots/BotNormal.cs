@@ -33,6 +33,11 @@ namespace RAWSimO.Core.Bots
         private static bool requestReoptimizationAfterFailingOfNextWaypointReservation = false;
 
         /// <summary>
+        /// Gets BotType
+        /// </summary>
+        public override BotType Type => BotType.BotNormal; 
+
+        /// <summary>
         /// The current destination of the bot as useful information for other mechanisms. If not available, the current waypoint will be provided.
         /// </summary>
         internal override Waypoint TargetWaypoint { get { return _destinationWaypoint != null ? _destinationWaypoint : _currentWaypoint; } }
@@ -370,18 +375,32 @@ namespace RAWSimO.Core.Bots
                     StateQueueEnqueue(new BotRest(restTask.RestingLocation, BotRest.DEFAULT_REST_TIME)); // TODO set paramterized wait time and adhere to it
                     break;
                 case BotTaskType.MultiPointGatherTask:
-                    var task = t as MultiPointGatherTask;
-                    var location =  task.Locations.FirstOrDefault();
+                    var MPGatherTask = t as MultiPointGatherTask;
+                    var location = MPGatherTask.Locations.FirstOrDefault();
                     //request move from current location to the first location in a task 
                     _appendMoveStates(CurrentWaypoint,location);
+                    //request assistant at location
+
+                    //enter waiting for assistant state
+
                     //remove first element 
-                    task.Locations.RemoveAt(0);
+                    MPGatherTask.Locations.RemoveAt(0);
                     //itterate over the remaining locations of a list and mark them to be visited in that order
-                    foreach(var nextLocation in task.Locations)
+                    foreach(var nextLocation in MPGatherTask.Locations)
                     {
                         _appendMoveStates(location, nextLocation);
+                        //request assistant at nextLocation
+
+                        //enter waiting for assistant state
+
                         location = nextLocation;
                     }
+                    break;
+                case BotTaskType.AssistTask:
+                    var assistTask = t as AssistTask;
+                    //move to needed waypoint
+                    _appendMoveStates(CurrentWaypoint, assistTask.Waypoint);
+                    //enter the state of waiting for the other bot
                     break;
                 default:
                     throw new ArgumentException("Unknown task-type: " + t.Type);
@@ -607,7 +626,7 @@ namespace RAWSimO.Core.Bots
             if (currentTime < 0.2)
                 return;
             //bot is blocked
-            if (this._waitUntil >= currentTime)
+            if (_waitUntil >= currentTime)
             {
                 // We still want to update the statistics of the bot
                 _updateStatistics(currentTime - lastTime, X, Y);

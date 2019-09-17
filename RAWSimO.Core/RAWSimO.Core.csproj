@@ -157,6 +157,7 @@
     <Compile Include="Control\StationManager.cs" />
     <Compile Include="Control\Defaults\TaskAllocation\BalancedBotManager.cs" />
     <Compile Include="Control\Defaults\TaskAllocation\SwarmBotManager.cs" />
+    <Compile Include="Elements\MateBot.cs" />
     <Compile Include="Generator\LayoutGenerator.cs" />
     <Compile Include="Generator\SemaphoreGenerator.cs" />
     <Compile Include="Generator\StationGenerator.cs" />
@@ -188,8 +189,8 @@
     <Compile Include="Elements\Compound.cs" />
     <Compile Include="Elements\InputStation.cs" />
     <Compile Include="Elements\OutputStation.cs" />
-    <Compile Include="Elements\MovableStation.cs"/>
-    <Compile Include="Elements\OutputStationAux.cs"/>
+    <Compile Include="Elements\MovableStation.cs" />
+    <Compile Include="Elements\OutputStationAux.cs" />
     <Compile Include="Elements\Tier.cs" />
     <Compile Include="Generator\InstanceGenerator.cs" />
     <Compile Include="Generator\OrderGenerator.cs" />

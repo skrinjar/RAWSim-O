@@ -381,14 +381,17 @@ namespace RAWSimO.Core.Generator
         {
             List<List<Waypoint>> waypoints = getWaypointsForInitialRobotPositions(tiles);
             List<Waypoint> potentialLocations = waypoints.SelectMany(w => w).Where(w => w.Pod == null && w.InputStation == null && w.OutputStation == null).ToList();
-            for (int i = 0; i < lc.BotCount + lc.MovableStationCount; i++)
+            for (int i = 0; i < lc.BotCount + lc.MovableStationCount + lc.MateBotCount; i++)
             {
                 int randomWaypointIndex = rand.NextInt(potentialLocations.Count);
                 Waypoint Waypoint = potentialLocations[randomWaypointIndex];
                 int orientation = 0;
+                var botType = i < lc.BotCount ? BotType.BotNormal : //first create NormalBots
+                              i < lc.BotCount + lc.MovableStationCount ? BotType.MovableStation : //then create MovableStations
+                              BotType.MateBot; //then MateBots
                 Bot bot = instance.CreateBot(instance.RegisterBotID(), tier, Waypoint.X, Waypoint.Y, lc.BotRadius, orientation,
                                              lc.PodTransferTime, lc.MaxAcceleration, lc.MaxDeceleration, lc.MaxVelocity,
-                                             lc.TurnSpeed, lc.CollisionPenaltyTime, i>= lc.BotCount);
+                                             lc.TurnSpeed, lc.CollisionPenaltyTime, botType);
                 Waypoint.AddBotApproaching(bot);
                 bot.CurrentWaypoint = Waypoint;
                 potentialLocations.RemoveAt(randomWaypointIndex);

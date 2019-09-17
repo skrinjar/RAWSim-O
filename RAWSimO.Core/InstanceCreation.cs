@@ -225,7 +225,7 @@ namespace RAWSimO.Core
         /// <param name="turnSpeed">The time it takes the bot to take a full turn in s.</param>
         /// <param name="collisionPenaltyTime">The penalty time for a collision in s.</param>
         /// <returns>The newly created bot.</returns>
-        public Bot CreateBot(int id, Tier tier, double x, double y, double radius, double orientation, double podTransferTime, double maxAcceleration, double maxDeceleration, double maxVelocity, double turnSpeed, double collisionPenaltyTime, bool createMovableStation = false)
+        public Bot CreateBot(int id, Tier tier, double x, double y, double radius, double orientation, double podTransferTime, double maxAcceleration, double maxDeceleration, double maxVelocity, double turnSpeed, double collisionPenaltyTime, BotType type)
         {
             // Consider override values
             if (SettingConfig.OverrideConfig != null && SettingConfig.OverrideConfig.OverrideBotPodTransferTime)
@@ -241,9 +241,15 @@ namespace RAWSimO.Core
             // Init
             Bot bot = null;
             MovableStation ms = null;
-            if (createMovableStation){
+            MateBot mb = null;
+            if (type == BotType.MovableStation) {
                 ms = new MovableStation(id, this, radius, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
                 bot = ms;
+            }
+            else if (type == BotType.MateBot)
+            {
+                mb = new MateBot(id, this, radius, maxAcceleration, maxDeceleration, maxVelocity, turnSpeed, collisionPenaltyTime, x, y);
+                bot = mb;
             }else{
                 switch (ControllerConfig.PathPlanningConfig.GetMethodType())
                 {
@@ -284,13 +290,23 @@ namespace RAWSimO.Core
                 ((BotHazard)bot).SetTargetOrientation(orientation);
             }
             // Add bot
-            if(ms != null)
+            //if MovableStation was created
+            if (ms != null)
             {
                 ms.Capacity = 1000;
                 Bots.Add(ms);
                 //bot was referencing only bot-part of movable station and those values were updated
                 MovableStations.Add(ms);
-            }else{
+            }
+            //if MateBot was created
+            else if (mb != null)
+            {
+                Bots.Add(mb);
+                MateBots.Add(mb);
+            }
+            //if NormalBot or BotHazzard were created
+            else
+            {
                 Bots.Add(bot);
             }
             tier.AddBot(bot);
