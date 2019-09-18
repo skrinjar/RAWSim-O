@@ -47,7 +47,10 @@ namespace RAWSimO.Visualization.Rendering
             { "SetdownPod", new SolidColorBrush(Colors.Yellow) },
             { "Rest", new SolidColorBrush(Colors.DarkBlue) },
             { "UseElevator", new SolidColorBrush(Colors.Teal) },
-            { "Debug", new SolidColorBrush(Colors.Red) }
+            { "Debug", new SolidColorBrush(Colors.Red) },
+            { "RequestAssistance", new SolidColorBrush(Colors.Black) },
+            { "MoveToAssist", new SolidColorBrush(Colors.DarkViolet) },
+            
         };
 
         public static readonly Dictionary<LetterColors, Brush> LetterColorBackgroundBrushes = new Dictionary<LetterColors, Brush>() {

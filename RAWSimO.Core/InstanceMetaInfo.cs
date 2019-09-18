@@ -139,6 +139,7 @@ namespace RAWSimO.Core
                     _updateables.AddRange(InputStations);
                     _updateables.AddRange(OutputStations);
                     _updateables.Add(BotCrashHandler);
+                    _updateables.Add(Controller.MateScheduler);
                 }
                 return _updateables;
             }

@@ -42,6 +42,14 @@ namespace RAWSimO.Core.Bots
         /// <summary>
         /// Indicates that the bot is using an elevator.
         /// </summary>
-        UseElevator
+        UseElevator,
+        /// <summary>
+        /// indicates that the bot is requesting assistance
+        /// </summary>
+        RequestAssistance,
+        /// <summary>
+        /// indicates that the bot will move to the waypoint to assist
+        /// </summary>
+        MoveToAssist,
     }
 }

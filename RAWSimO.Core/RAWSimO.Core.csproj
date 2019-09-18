@@ -121,6 +121,7 @@
     <Compile Include="Control\Defaults\TaskAllocation\ConceptBotManager.cs" />
     <Compile Include="Control\Defaults\TaskAllocation\ConstantRatioBotManager.cs" />
     <Compile Include="Control\Defaults\TaskAllocation\DummyBotManager.cs" />
+    <Compile Include="Control\MateScheduler.cs" />
     <Compile Include="Control\PodStorageManager.cs" />
     <Compile Include="Control\Defaults\PodStorage\StationBasedPodStorageManager.cs" />
     <Compile Include="Control\Defaults\PodStorage\TurnoverPodStorageManager.cs" />

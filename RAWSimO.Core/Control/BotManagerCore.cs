@@ -364,7 +364,9 @@ namespace RAWSimO.Core.Control
         {
             if (t == null)
                 return;
-            if (t.Type != BotTaskType.None && t != _taskQueues[r])
+            if (t.Type != BotTaskType.None && 
+                t.Type != BotTaskType.AssistTask && 
+                t != _taskQueues[r])
                 throw new ArgumentException("Wrong task to complete - bot was executing another task!");
 
             // Remove the finished task and free the resources

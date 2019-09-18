@@ -128,6 +128,8 @@ namespace RAWSimO.Core.Control
             }
             // Init allocator
             Allocator = new Allocator(instance);
+            //Init Mate scheduler
+            MateScheduler = new MateScheduler(instance);
         }
 
         /// <summary>
@@ -174,6 +176,10 @@ namespace RAWSimO.Core.Control
         /// The allocator.
         /// </summary>
         public Allocator Allocator { get; private set; }
+        /// <summary>
+        /// The mate scheduler
+        /// </summary>
+        public MateScheduler MateScheduler { get;  set; }
 
         /// <summary>
         /// The current time.
