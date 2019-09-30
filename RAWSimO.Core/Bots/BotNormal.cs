@@ -523,7 +523,8 @@ namespace RAWSimO.Core.Bots
         /// <returns><code>true</code> if the bot is resting, <code>false</code> otherwise.</returns>
         public bool IsResting()
         {
-            return StateQueueCount == 0 || StateQueuePeek() is BotRest;
+            var type = StateQueueCount == 0 ? BotStateType.Rest : StateQueuePeek().Type;
+            return type == BotStateType.Rest || type == BotStateType.WaitingForMate || type == BotStateType.WaitingForStation ;
         }
 
         /// <summary>
