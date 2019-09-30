@@ -76,7 +76,14 @@ namespace RAWSimO.Core.Bots
         }
         private Waypoint _nextWaypoint;
         private int _nextWaypointID;
-
+        /// <summary>
+        /// Bot assisting this bot on his task
+        /// </summary>
+        private Bot Assistant { get; set; }
+        /// <summary>
+        /// true if bot is currently standing on destination waypoint
+        /// </summary>
+        public bool isInPlace = false;
         /// <summary>
         /// next way point
         /// </summary>
@@ -382,7 +389,7 @@ namespace RAWSimO.Core.Bots
                     //request move from current location to the first location in a task 
                     _appendMoveStates(CurrentWaypoint, location);
                     //enter waiting for assistant state
-
+                    StateQueueEnqueue(new WaitForMate(location));
                     //remove first element 
                     MPGatherTask.Locations.RemoveAt(0);
                     //itterate over the remaining locations of a list and mark them to be visited in that order
@@ -391,9 +398,9 @@ namespace RAWSimO.Core.Bots
                         //request assistant at nextLocation
                         StateQueueEnqueue(new RequestAssistance(nextLocation));
                         //request move from location to nextlocation
-                        _appendMoveStates(location, nextLocation);                    
+                        _appendMoveStates(location, nextLocation);
                         //enter waiting for assistant state
-
+                        StateQueueEnqueue(new WaitForMate(nextLocation));
                         location = nextLocation;
                     }
                     break;
@@ -402,7 +409,7 @@ namespace RAWSimO.Core.Bots
                     //move to needed waypoint
                     _appendMoveStates(CurrentWaypoint, assistTask.Waypoint, true);
                     //enter the state of waiting for the other bot
-
+                    StateQueueEnqueue(new WaitForStation(assistTask.Waypoint));
                     break;
                 default:
                     throw new ArgumentException("Unknown task-type: " + t.Type);
@@ -442,25 +449,7 @@ namespace RAWSimO.Core.Bots
         private void DequeueState(double lastTime, double currentTime)
         {
             IBotState dequeuedState = StateQueueDequeue();
-
-            /*
-            if (_stateQueue.Count > 0)
-            {
-                //directly the next way point
-                var moveBot = _stateQueue.Peek() as BotMove;
-                if(moveBot != null && moveBot.DestinationWaypoint == CurrentWaypoint)
-                {
-                    DequeueState(currentTime);
-                    return;
-                }
-            }
-             * */
-
             Debug.Assert(StateQueueCount == 0 || !(StateQueuePeek() is BotMove) || this.CurrentWaypoint.Tier.ID == ((BotMove)StateQueuePeek()).DestinationWaypoint.Tier.ID);
-
-            // Act on next task
-            if (StateQueueCount > 0)
-                StateQueuePeek().Act(this, lastTime, currentTime);
         }
 
         /// <summary>
@@ -545,6 +534,42 @@ namespace RAWSimO.Core.Bots
             if (StateQueueCount > 0 && StateQueuePeek() is BotMove)
                 (StateQueuePeek() as BotMove).LogUnfinishedTrip(this);
         }
+        /// <summary>
+        /// adjust goal waypoint so assistance can come
+        /// </summary>
+        /// <param name="waypoint">Waypoint where assistance will arrive</param>
+        public void SignalAssistanceAt(Waypoint waypoint, Bot assistant)
+        {
+            Assistant = assistant;
+            foreach(var potentialDestination in waypoint.Paths)
+                if(!potentialDestination.HasPod)
+                {
+                    DestinationWaypoint = potentialDestination;
+                    break;
+                }
+            if(StateQueuePeek().Type == BotStateType.Move)
+            {
+                _stateQueue.Peek().DestinationWaypoint = DestinationWaypoint;
+                RequestReoptimization = true;
+            }
+            if(StateQueuePeek().Type == BotStateType.WaitingForMate)
+            {
+                //if you are already waiting, abort waiting, 
+                //move to new destination so assistant can come
+                //and begin wait again
+                var oldState = StateQueueDequeue();
+                oldState.DestinationWaypoint = DestinationWaypoint;
+                Queue<IBotState> newStateQ = new Queue<IBotState>();
+                newStateQ.Enqueue(new BotMove(DestinationWaypoint));
+                newStateQ.Enqueue(oldState);
+                foreach(var state in _stateQueue)
+                {
+                    newStateQ.Enqueue(state);
+                }
+                _stateQueue = newStateQ;
+                RequestReoptimization = true;
+            }
+        }
 
         #endregion
 
@@ -626,6 +651,7 @@ namespace RAWSimO.Core.Bots
         public override void Update(double lastTime, double currentTime)
         {
             //wait short start time
+
             if (currentTime < 0.2)
                 return;
             //bot is blocked
@@ -952,7 +978,7 @@ namespace RAWSimO.Core.Bots
             /// <summary>
             /// next node to reach
             /// </summary>
-            public Waypoint DestinationWaypoint { get; private set; }
+            public Waypoint DestinationWaypoint { get; set; }
 
             /// <summary>
             /// constructor
@@ -1058,6 +1084,8 @@ namespace RAWSimO.Core.Bots
                     // Remove this task
                     bot.NextWaypoint = null;
                     bot.DestinationWaypoint = null;
+                    //if it is the end of assist task
+                    bot.isInPlace = true;
                     bot.DequeueState(lastTime, currentTime);
                     return;
                 }
@@ -1203,7 +1231,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool _executed = false;
             public BotPickupPod(Pod b) { _pod = b; _waypoint = _pod.Waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 var bot = self as BotNormal;
@@ -1263,7 +1291,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool _executed = false;
             public BotSetdownPod(Waypoint w) { _waypoint = w; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 var bot = self as BotNormal;
@@ -1332,7 +1360,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool alreadyRequested = false;
             public BotGetItems(InsertTask storeTask) { _storeTask = storeTask; _waypoint = _storeTask.InputStation.Waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 var bot = self as BotNormal;
@@ -1441,7 +1469,7 @@ namespace RAWSimO.Core.Bots
             bool alreadyRequested = false;
             public BotPutItems(ExtractTask extractTask)
             { _extractTask = extractTask; _waypoint = extractTask.OutputStation.Waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 var bot = self as BotNormal;
@@ -1554,7 +1582,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool inUse;
             private double travelUntil;
-            public Waypoint DestinationWaypoint { get { return _waypointTo; } }
+            public Waypoint DestinationWaypoint { get { return _waypointTo; } set { _waypointTo = value; } }
             public UseElevator(Elevator elevator, Waypoint waypointFrom, Waypoint waypointTo) { _elevator = elevator; _waypointFrom = waypointFrom; _waypointTo = waypointTo; inUse = false; }
             public void Act(Bot self, double lastTime, double currentTime)
             {
@@ -1615,7 +1643,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool alreadyRested = false;
             public BotRest(Waypoint waypoint, double timeSpan) { _waypoint = waypoint; _timeSpan = timeSpan; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
 
             public void Act(Bot self, double lastTime, double currentTime)
             {
@@ -1680,7 +1708,7 @@ namespace RAWSimO.Core.Bots
             /// <summary>
             /// waypoint where assistence is required
             /// </summary>
-            public Waypoint DestinationWaypoint { get; private set; }
+            public Waypoint DestinationWaypoint { get; set; } //not used but needed because of interface
             /// <summary>
             /// type of BotState
             /// </summary>
@@ -1693,9 +1721,9 @@ namespace RAWSimO.Core.Bots
             /// <param name="currentTime"></param>
             public void Act(Bot self, double lastTime, double currentTime)
             {
-                BotNormal bot = self as BotNormal;
-                bot.DequeueState(lastTime, currentTime);
+                BotNormal bot = self as BotNormal;                
                 bot.Instance.Controller.MateScheduler.RequestAssistance(self, DestinationWaypoint);
+                bot.DequeueState(lastTime, currentTime);
             }
             /// <summary>
             /// state name, used in drawing
@@ -1715,6 +1743,72 @@ namespace RAWSimO.Core.Bots
             public override string ToString() { return "MoveToAssist"; }
 
             public new BotStateType Type => BotStateType.MoveToAssist;
+        }
+
+        internal class WaitForMate : IBotState
+        {
+            public WaitForMate(Waypoint waypoint)
+            {
+                DestinationWaypoint = waypoint;
+            }
+            
+            public Waypoint DestinationWaypoint { get;  set; } //not used but needed because of interface
+
+            public BotStateType Type => BotStateType.WaitingForMate;
+            /// <summary>
+            /// Checks if MateBot arrived at his location
+            /// </summary>
+            /// <param name="self"></param>
+            /// <param name="lastTime"></param>
+            /// <param name="currentTime"></param>
+            public void Act(Bot _self, double lastTime, double currentTime)
+            {
+                var self = _self as BotNormal;
+                if (self.Assistant == null) return;
+                if (!(self.Assistant is MateBot)) return;
+                MateBot assistant = self.Assistant as MateBot;
+                //when Mate is on it's spot, dequeue this state
+                if (self.HasAssistance && assistant.isInPlace )
+                {
+                    self.Assistant = null;
+                    self.HasAssistance = false;
+
+                    //both are here, dequeue their states and nullify assistant related variables
+                    self.DequeueState(lastTime, currentTime);
+                    self.isInPlace = false;
+                    assistant.DequeueState(lastTime, currentTime);
+                    assistant.isInPlace = false;
+                    assistant.AssignTask(new DummyTask(self.Instance, assistant));
+                }
+            }
+
+            /// <summary>
+            /// state name, used in drawing
+            /// </summary>
+            /// <returns>name</returns>
+            public override string ToString() { return "WaitingForMate"; }
+        }
+
+        internal class WaitForStation : IBotState
+        {
+            public WaitForStation(Waypoint waypoint)
+            {
+                DestinationWaypoint = waypoint;
+            }
+
+            public Waypoint DestinationWaypoint { get; set; }
+
+            public BotStateType Type => BotStateType.WaitingForStation;
+
+            public void Act(Bot self, double lastTime, double currentTime)
+            {
+                //don't act in WaitForStation state, let bot in WateForMate state do the unlocking
+            }
+            /// <summary>
+            /// state name, used in drawing
+            /// </summary>
+            /// <returns>name</returns>
+            public override string ToString() { return "WaitingForStation"; }
         }
 
         #endregion

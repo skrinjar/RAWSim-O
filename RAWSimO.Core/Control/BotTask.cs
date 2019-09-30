@@ -2,6 +2,7 @@
 using RAWSimO.Core.Items;
 using RAWSimO.Core.Management;
 using RAWSimO.Core.Waypoints;
+using RAWSimO.Core.Bots;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,8 @@ namespace RAWSimO.Core.Control
             BotToAssist = botToAssist;
             BotToAssistArrived = false;
             AssistantArrived = false;
+            //signal bot where assistance will arrive so it can adjust it's goal waypoint
+            (BotToAssist as BotNormal).SignalAssistanceAt(Waypoint, assistant); 
         }
         /// <summary>
         /// Construct new AssistTask for a location on idx

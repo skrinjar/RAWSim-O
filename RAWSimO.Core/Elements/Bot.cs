@@ -99,6 +99,10 @@ namespace RAWSimO.Core.Elements
         /// A flag that indicates that the robot is currently queueing.
         /// </summary>
         public bool IsQueueing = false;
+        /// <summary>
+        /// a flag that indicates if a bot has assitance assigned to it's task
+        /// </summary>
+        public bool HasAssistance = false;
 
         #endregion
 

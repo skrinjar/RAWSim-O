@@ -78,7 +78,7 @@ namespace RAWSimO.Core.Control
         {
             //go through all MateBots and see if any of them is idle an can thus be put in AvailableMates list
             foreach (var bot in MateBots)
-                if(bot.CurrentTask.Type == BotTaskType.None)
+                if(bot.CurrentTask.Type == BotTaskType.None && !AvailableMates.Contains(bot))
                     AvailableMates.Add(bot);
             //check if any assistance is needed and if any assistance can be given
             if (requestedAssistanceLocations.Count > 0 && AvailableMates.Count > 0)
@@ -95,6 +95,7 @@ namespace RAWSimO.Core.Control
                 AssistTask task = new AssistTask(Instance, mate, location, bot);
                 //assign new task to mate
                 mate.AssignTask(task);
+                bot.HasAssistance = true;
                
             }
         }

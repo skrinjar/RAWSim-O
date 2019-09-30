@@ -51,5 +51,13 @@ namespace RAWSimO.Core.Bots
         /// indicates that the bot will move to the waypoint to assist
         /// </summary>
         MoveToAssist,
+        /// <summary>
+        /// indicates that the bot is waiting for MateBot
+        /// </summary>
+        WaitingForMate,
+        /// <summary>
+        /// indicates that the bot is waiting for station
+        /// </summary>
+        WaitingForStation,
     }
 }

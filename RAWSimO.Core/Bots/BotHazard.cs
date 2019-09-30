@@ -1071,7 +1071,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool _executed = false;
             public BotPickupPod(Pod b) { _pod = b; _waypoint = _pod.Waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 BotHazard driver = self as BotHazard;
@@ -1113,7 +1113,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool _executed = false;
             public BotSetdownPod(Waypoint w) { _waypoint = w; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 BotHazard driver = self as BotHazard;
@@ -1162,7 +1162,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
             private bool alreadyRequested = false;
             public BotGetItems(InsertTask storeTask) { _storeTask = storeTask; _waypoint = _storeTask.InputStation.Waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 BotHazard driver = self as BotHazard;
@@ -1257,7 +1257,7 @@ namespace RAWSimO.Core.Bots
             bool alreadyRequested = false;
             public BotPutItems(ExtractTask extractTask)
             { _extractTask = extractTask; _waypoint = _extractTask.OutputStation.Waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 BotHazard driver = self as BotHazard;
@@ -1355,7 +1355,7 @@ namespace RAWSimO.Core.Bots
             private Waypoint _waypoint;
             private bool _initialized = false;
             public BotRest(Waypoint waypoint) { _waypoint = waypoint; }
-            public Waypoint DestinationWaypoint { get { return _waypoint; } }
+            public Waypoint DestinationWaypoint { get { return _waypoint; } set { _waypoint = value; } }
 
             #region IBotState Members
 
@@ -1404,7 +1404,7 @@ namespace RAWSimO.Core.Bots
             /// </summary>
             private bool _initialized;
             internal double moveToX, moveToY;
-            public Waypoint DestinationWaypoint { get; private set; }
+            public Waypoint DestinationWaypoint { get;  set; }
             private WaypointSearchResult _currentRoute;
             public BotMove(BotHazard driver, double x, double y) { _driver = driver; DestinationWaypoint = null; _driver.CurrentWaypoint = null; moveToX = x; moveToY = y; }
             public BotMove(BotHazard driver, Waypoint w) { _driver = driver; DestinationWaypoint = w; moveToX = (w != null) ? w.X : _driver.X; moveToY = (w != null) ? w.Y : _driver.Y; }
@@ -1755,7 +1755,7 @@ namespace RAWSimO.Core.Bots
             private bool _initialized = false;
 
             public BotEvade(BotHazard driver) { _driver = driver; }
-            public Waypoint DestinationWaypoint { get; private set; }
+            public Waypoint DestinationWaypoint { get;  set; }
             public void Act(Bot self, double lastTime, double currentTime)
             {
                 // Initialize

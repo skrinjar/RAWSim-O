@@ -50,7 +50,9 @@ namespace RAWSimO.Visualization.Rendering
             { "Debug", new SolidColorBrush(Colors.Red) },
             { "RequestAssistance", new SolidColorBrush(Colors.Black) },
             { "MoveToAssist", new SolidColorBrush(Colors.DarkViolet) },
-            
+            { "WaitingForStation", new SolidColorBrush(Colors.DarkRed) },
+            { "WaitingForMate", new SolidColorBrush(Colors.DarkGreen) },
+
         };
 
         public static readonly Dictionary<LetterColors, Brush> LetterColorBackgroundBrushes = new Dictionary<LetterColors, Brush>() {
